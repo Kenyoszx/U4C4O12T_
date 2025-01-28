@@ -29,8 +29,6 @@ void npClear();
 void npWrite();
 void show_number();
 void blink();
-void increase();
-void decrement();
 void NUMBER_0();
 void NUMBER_1();
 void NUMBER_2();
@@ -186,6 +184,7 @@ void show_number(){
     exit (1);
     break;
   }
+  return;
 }
 void NUMBER_0(){
   npClear();
@@ -343,10 +342,19 @@ static void gpio_irq_handler(uint gpio,uint32_t events){
   {
     last_time = current_time; // Atualiza o tempo do último evento
     //Código Função:
-    if (gpio == BUTTON_A_PIN)
-      increase();
-    else if (gpio == BUTTON_B_PIN)
-      decrement();
+    if (gpio == BUTTON_A_PIN){
+      // incrementa o contador e Atualiza o número na Matriz
+      counter ++;
+      if (counter > 9)
+        counter = 0;
+      show_number();
+    }else if (gpio == BUTTON_B_PIN){
+      // Decrementa o Contador e atualiza o número na Matriz
+      counter --;
+      if (counter < 0)
+        counter = 9;
+      show_number();
+    }
   }
   
 }
@@ -376,18 +384,4 @@ void blink(){
   sleep_ms(100);
   gpio_put(LED_PIN_BLUE,false);
   sleep_ms(100);  
-}
-void increase(){
-  // incrementa o contador e Atualiza o número na Matriz
-  counter ++;
-  if (counter > 9)
-    counter = 0;
-  show_number();
-}
-void decrement(){
-  // Decrementa o Contador e atualiza o número na Matriz
-  counter --;
-  if (counter < 0)
-    counter = 9;
-  show_number();
 }
