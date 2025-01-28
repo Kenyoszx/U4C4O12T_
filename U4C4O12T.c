@@ -51,7 +51,8 @@ struct pixel_t
 };
 typedef struct pixel_t npLED_t;
 
-npLED_t leds[LED_COUNT]; // buffer de pixels que formam a matriz.
+// buffer de pixels que formam a matriz.
+npLED_t leds[LED_COUNT]; 
 
 // Variáveis para uso da máquina PIO.
 PIO np_pio;
@@ -59,10 +60,9 @@ uint sm;
 
 int main()
 {
-  stdio_init_all();
+  stdio_init_all(); // Inicializa a entrada e saída 
   init();
   while (true) {
-    //Led RGB pisca 5 vezes por segundo em cores alternadas
     blink();
   }
 }
@@ -97,7 +97,6 @@ void init(){
   gpio_set_irq_enabled_with_callback(BUTTON_B_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerB); //Rotina de Interrupção
   
 }
-
 void npInit(uint pin){
   // Inicializa a máquina PIO para controle da matriz de LEDs.
 
@@ -190,16 +189,83 @@ void show_number(){
     break;
   }
 }
-void NUMBER_0(){}
-void NUMBER_1(){}
-void NUMBER_2(){}
-void NUMBER_3(){}
-void NUMBER_4(){}
-void NUMBER_5(){}
-void NUMBER_6(){}
-void NUMBER_7(){}
-void NUMBER_8(){}
-void NUMBER_9(){}
+void NUMBER_0(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(6,50,50,50);
+  npSetLED(8,50,50,50);
+  npSetLED(11,50,50,50);
+  npSetLED(13,50,50,50);
+  npSetLED(16,50,50,50);
+  npSetLED(18,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
+  npWrite();
+}
+void NUMBER_1(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(7,50,50,50);
+  npSetLED(12,50,50,50);
+  npSetLED(17,50,50,50);
+  npSetLED(22,50,50,50);
+  npWrite();
+}
+void NUMBER_2(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(6,50,50,50);
+  npSetLED(11,50,50,50);
+  npSetLED(12,50,50,50);
+  npSetLED(13,50,50,50);
+  npSetLED(18,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
+  npWrite();
+}
+void NUMBER_3(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_4(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_5(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_6(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_7(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_8(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
+void NUMBER_9(){
+  npClear();
+  npSetLED(1,50,50,50);
+  npWrite();
+}
 static void gpio_irq_handerA(uint gpio,uint32_t events){
 // Configura a ação ao apertar o botão A e implementa o Debouce  
 
@@ -214,7 +280,6 @@ static void gpio_irq_handerA(uint gpio,uint32_t events){
     increase();
   }
   
-
 }
 static void gpio_irq_handerB(uint gpio,uint32_t events){
 // Configura a ação ao apertar o botão B e implementa o Debouce
@@ -230,10 +295,9 @@ static void gpio_irq_handerB(uint gpio,uint32_t events){
     decrement();
   }
 
-
-
 }
 void blink(){
+  // Pisca o LED 5 vezes por segundo em cores alternadas
   gpio_put(LED_PIN_RED,true);
   sleep_ms(100);
   gpio_put(LED_PIN_RED,false);
@@ -260,12 +324,14 @@ void blink(){
   sleep_ms(100);  
 }
 void increase(){
+  // incrementa o contador e Atualiza o número na Matriz
   counter ++;
   if (counter > 9)
     counter = 0;
   show_number();
 }
 void decrement(){
+  // Decrementa o Contador e atualiza o número na Matriz
   counter --;
   if (counter < 9)
     counter = 9;
