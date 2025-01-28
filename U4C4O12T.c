@@ -13,7 +13,12 @@
 #define BUTTON_A_PIN 5
 #define BUTTON_B_PIN 6
 
-#define LED_COUNT 25 // Quantidade de pinos na Matriz
+// Quantidade de pinos na Matriz
+#define LED_COUNT 25
+
+// Variáveis globais
+static volatile uint32_t last_time = 0; // Armazena o tempo do último evento (em microssegundos)
+uint counter;
 
 // Protótipos das Funções
 void init();
@@ -21,6 +26,8 @@ void npInit(uint);
 void npSetLED(const uint, const uint8_t, const uint8_t, const uint8_t);
 void npClear();
 void npWrite();
+void increase();
+void decrement();
 void NUMBER_0();
 void NUMBER_1();
 void NUMBER_2();
@@ -31,6 +38,8 @@ void NUMBER_6();
 void NUMBER_7();
 void NUMBER_8();
 void NUMBER_9();
+static void gpio_irq_handerA(uint gpio,uint32_t events);
+static void gpio_irq_handerB(uint gpio,uint32_t events);
 
 // Definição de pixel GRB
 struct pixel_t
@@ -55,7 +64,7 @@ int main()
 }
 
 void init(){
-     // inicialização dos pinos
+  // inicialização dos pinos
   npInit(MATRIZ_LEDS);
   npClear();
   npWrite();
@@ -71,6 +80,18 @@ void init(){
   gpio_init(LED_PIN_RED);
   gpio_set_dir(LED_PIN_RED, GPIO_OUT);
   gpio_put(LED_PIN_RED, 0);
+
+  //inicialização dos botões com resistor interno pull-up
+  gpio_init(BUTTON_A_PIN);
+  gpio_set_dir(BUTTON_A_PIN, GPIO_IN);
+  gpio_pull_up(BUTTON_A_PIN);
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerA); //Rotina de Interrupção
+  
+  gpio_init(BUTTON_B_PIN);
+  gpio_set_dir(BUTTON_B_PIN, GPIO_IN);
+  gpio_pull_up(BUTTON_B_PIN);
+  gpio_set_irq_enabled_with_callback(BUTTON_B_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerB); //Rotina de Interrupção
+  
 }
 
 void npInit(uint pin){
@@ -134,3 +155,43 @@ void NUMBER_6(){}
 void NUMBER_7(){}
 void NUMBER_8(){}
 void NUMBER_9(){}
+static void gpio_irq_handerA(uint gpio,uint32_t events){
+  // Desativa a Rotina de interruçao durante a execução
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,false,&gpio_irq_handerA);
+
+  // Obtém o tempo atual em microssegundos
+  uint32_t current_time = to_us_since_boot(get_absolute_time());
+
+  // Verifica se passou tempo suficiente desde o último evento
+  if (current_time - last_time > 50000) // 50 ms de debouncing
+  {
+    last_time = current_time; // Atualiza o tempo do último evento
+    //Código Função:
+    increase();
+  }
+  
+  // Reativa a rotina de interrupção
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerA);
+}
+static void gpio_irq_handerB(uint gpio,uint32_t events){
+
+  // Desativa a Rotina de interruçao durante a execução
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,false,&gpio_irq_handerB);
+
+  // Obtém o tempo atual em microssegundos
+  uint32_t current_time = to_us_since_boot(get_absolute_time());
+
+  // Verifica se passou tempo suficiente desde o último evento
+  if (current_time - last_time > 50000) // 50 ms de debouncing
+  {
+    last_time = current_time; // Atualiza o tempo do último evento
+    //Código Função:
+    decrement();
+  }
+
+  // Reativa a rotina de interrupção
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerB);
+
+}
+void increase(){}
+void decrement(){}
