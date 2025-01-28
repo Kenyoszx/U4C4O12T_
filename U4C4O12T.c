@@ -234,36 +234,79 @@ void NUMBER_2(){
 void NUMBER_3(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(8,50,50,50);
+  npSetLED(11,50,50,50);
+  npSetLED(12,50,50,50);
+  npSetLED(13,50,50,50);
+  npSetLED(18,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_4(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(6,50,50,50);
+  npSetLED(11,50,50,50);
+  npSetLED(12,50,50,50);
+  npSetLED(13,50,50,50);
+  npSetLED(16,50,50,50);
+  npSetLED(18,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_5(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_6(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_7(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_8(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 void NUMBER_9(){
   npClear();
   npSetLED(1,50,50,50);
+  npSetLED(2,50,50,50);
+  npSetLED(3,50,50,50);
+  npSetLED(21,50,50,50);
+  npSetLED(22,50,50,50);
+  npSetLED(23,50,50,50);
   npWrite();
 }
 static void gpio_irq_handerA(uint gpio,uint32_t events){
