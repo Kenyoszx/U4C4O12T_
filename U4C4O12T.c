@@ -1,4 +1,9 @@
-//Inclusão das Bibliotecas
+/*O Código Mantém um LED piscando no Loop principal em diversas cores 5 vezes por segundo, e
+uma Matriz de Leds que representa o número armazenado no Contador, ao apertar um dos Botões
+(A ou B) é Ativada uma rotina de interrupção que Aumenta ou diminui o contador e consequentemente
+o número representado na Matriz de Leds*/
+
+// Inclusão das Bibliotecas
 #include <stdio.h>
 #include <stdlib.h>
 #include "pico/stdlib.h"
@@ -39,7 +44,7 @@ void NUMBER_6();
 void NUMBER_7();
 void NUMBER_8();
 void NUMBER_9();
-static void gpio_irq_handler(uint gpio,uint32_t events);
+static void gpio_irq_handler(uint gpio, uint32_t events);
 
 // Definição de pixel GRB
 struct pixel_t
@@ -49,7 +54,7 @@ struct pixel_t
 typedef struct pixel_t npLED_t;
 
 // buffer de pixels que formam a matriz.
-npLED_t leds[LED_COUNT]; 
+npLED_t leds[LED_COUNT];
 
 // Variáveis para uso da máquina PIO.
 PIO np_pio;
@@ -57,14 +62,16 @@ uint sm;
 
 int main()
 {
-  stdio_init_all(); // Inicializa a entrada e saída 
+  stdio_init_all(); // Inicializa a entrada e saída
   init();
-  while (true) {
+  while (true)
+  {
     blink();
   }
 }
 
-void init(){
+void init()
+{
   // inicialização dos pinos
   npInit(MATRIZ_LEDS);
   NUMBER_0();
@@ -81,19 +88,19 @@ void init(){
   gpio_set_dir(LED_PIN_RED, GPIO_OUT);
   gpio_put(LED_PIN_RED, 0);
 
-  //inicialização dos botões com resistor interno pull-up
+  // inicialização dos botões com resistor interno pull-up
   gpio_init(BUTTON_A_PIN);
   gpio_set_dir(BUTTON_A_PIN, GPIO_IN);
   gpio_pull_up(BUTTON_A_PIN);
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handler); //Rotina de Interrupção
-  
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler); // Rotina de Interrupção
+
   gpio_init(BUTTON_B_PIN);
   gpio_set_dir(BUTTON_B_PIN, GPIO_IN);
   gpio_pull_up(BUTTON_B_PIN);
-  gpio_set_irq_enabled_with_callback(BUTTON_B_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handler); //Rotina de Interrupção
-  
+  gpio_set_irq_enabled_with_callback(BUTTON_B_PIN, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_handler); // Rotina de Interrupção
 }
-void npInit(uint pin){
+void npInit(uint pin)
+{
   // Inicializa a máquina PIO para controle da matriz de LEDs.
 
   // Cria programa PIO.
@@ -119,20 +126,23 @@ void npInit(uint pin){
     leds[i].B = 0;
   }
 }
-void npSetLED(const uint index, const uint8_t r, const uint8_t g, const uint8_t b){
+void npSetLED(const uint index, const uint8_t r, const uint8_t g, const uint8_t b)
+{
   // Atribui uma cor RGB a um LED.
 
   leds[index].R = r;
   leds[index].G = g;
   leds[index].B = b;
 }
-void npClear(){
+void npClear()
+{
   // Limpa o buffer de pixels.
 
   for (uint i = 0; i < LED_COUNT; ++i)
     npSetLED(i, 0, 0, 0);
 }
-void npWrite(){
+void npWrite()
+{
   // Escreve os dados do buffer nos LEDs.
 
   // Escreve cada dado de 8-bits dos pixels em sequência no buffer da máquina PIO.
@@ -142,9 +152,9 @@ void npWrite(){
     pio_sm_put_blocking(np_pio, sm, leds[i].R);
     pio_sm_put_blocking(np_pio, sm, leds[i].B);
   }
-  sleep_us(100); // Espera 100us, sinal de RESET do datasheet.
 }
-void show_number(){
+void show_number()
+{
   // Para cada número no contador mostra a animação do mesmo na matriz
   switch (counter)
   {
@@ -180,208 +190,222 @@ void show_number(){
     break;
   default:
     // Se encontrar algum valor fora do intervalo de 1 à 9 encerra a execução
-    printf("[ERRO] Valor Inesperado no Contador"); 
-    exit (1);
+    printf("[ERRO] Valor Inesperado no Contador");
+    exit(1);
     break;
   }
-  return;
 }
-void NUMBER_0(){
+void NUMBER_0()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(6,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(6, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_1(){
+void NUMBER_1()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(7,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(17,50,50,0);
-  npSetLED(22,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(7, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(17, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
   npWrite();
 }
-void NUMBER_2(){
+void NUMBER_2()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(6,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(6, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_3(){
+void NUMBER_3()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_4(){
+void NUMBER_4()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_5(){
+void NUMBER_5()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_6(){
+void NUMBER_6()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(6,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(6, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_7(){
+void NUMBER_7()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_8(){
+void NUMBER_8()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(6,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(6, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-void NUMBER_9(){
+void NUMBER_9()
+{
   npClear();
-  npSetLED(1,50,50,0);
-  npSetLED(2,50,50,0);
-  npSetLED(3,50,50,0);
-  npSetLED(8,50,50,0);
-  npSetLED(11,50,50,0);
-  npSetLED(12,50,50,0);
-  npSetLED(13,50,50,0);
-  npSetLED(16,50,50,0);
-  npSetLED(18,50,50,0);
-  npSetLED(21,50,50,0);
-  npSetLED(22,50,50,0);
-  npSetLED(23,50,50,0);
+  npSetLED(1, 50, 50, 0);
+  npSetLED(2, 50, 50, 0);
+  npSetLED(3, 50, 50, 0);
+  npSetLED(8, 50, 50, 0);
+  npSetLED(11, 50, 50, 0);
+  npSetLED(12, 50, 50, 0);
+  npSetLED(13, 50, 50, 0);
+  npSetLED(16, 50, 50, 0);
+  npSetLED(18, 50, 50, 0);
+  npSetLED(21, 50, 50, 0);
+  npSetLED(22, 50, 50, 0);
+  npSetLED(23, 50, 50, 0);
   npWrite();
 }
-static void gpio_irq_handler(uint gpio,uint32_t events){
-// Configura a ação ao apertar o botão e implementa o Debouce  
+static void gpio_irq_handler(uint gpio, uint32_t events)
+{
+  // Configura a ação ao apertar o botão e implementa o Debouce
 
   // Obtém o tempo atual em microssegundos
   uint32_t current_time = to_us_since_boot(get_absolute_time());
 
   // Verifica se passou tempo suficiente desde o último evento
-  if (current_time - last_time > 50000) // 50 ms de debouncing
+  if (current_time - last_time > 200000) // 200 ms de debouncing
   {
     last_time = current_time; // Atualiza o tempo do último evento
-    //Código Função:
-    if (gpio == BUTTON_A_PIN){
+    // Código Função:
+    if (gpio == BUTTON_A_PIN)
+    {
       // incrementa o contador e Atualiza o número na Matriz
-      counter ++;
+      counter++;
       if (counter > 9)
         counter = 0;
       show_number();
-    }else if (gpio == BUTTON_B_PIN){
+    }
+    else if (gpio == BUTTON_B_PIN)
+    {
       // Decrementa o Contador e atualiza o número na Matriz
-      counter --;
+      counter--;
       if (counter < 0)
         counter = 9;
       show_number();
     }
   }
-  
 }
-void blink(){
+void blink()
+{
   // Pisca o LED 5 vezes por segundo em cores alternadas
-  gpio_put(LED_PIN_RED,true);
+  gpio_put(LED_PIN_RED, true);
   sleep_ms(100);
-  gpio_put(LED_PIN_RED,false);
+  gpio_put(LED_PIN_RED, false);
   sleep_ms(100);
-  gpio_put(LED_PIN_BLUE,true);
+  gpio_put(LED_PIN_BLUE, true);
   sleep_ms(100);
-  gpio_put(LED_PIN_BLUE,false);
+  gpio_put(LED_PIN_BLUE, false);
   sleep_ms(100);
-  gpio_put(LED_PIN_GREEN,true);
+  gpio_put(LED_PIN_GREEN, true);
   sleep_ms(100);
-  gpio_put(LED_PIN_GREEN,false);
+  gpio_put(LED_PIN_GREEN, false);
   sleep_ms(100);
-  gpio_put(LED_PIN_RED,true);
-  gpio_put(LED_PIN_BLUE,true);
-  gpio_put(LED_PIN_GREEN,true);
+  gpio_put(LED_PIN_RED, true);
+  gpio_put(LED_PIN_BLUE, true);
+  gpio_put(LED_PIN_GREEN, true);
   sleep_ms(100);
-  gpio_put(LED_PIN_RED,false);
-  gpio_put(LED_PIN_BLUE,false);
-  gpio_put(LED_PIN_GREEN,false);
+  gpio_put(LED_PIN_RED, false);
+  gpio_put(LED_PIN_BLUE, false);
+  gpio_put(LED_PIN_GREEN, false);
   sleep_ms(100);
-  gpio_put(LED_PIN_BLUE,true);
+  gpio_put(LED_PIN_BLUE, true);
   sleep_ms(100);
-  gpio_put(LED_PIN_BLUE,false);
-  sleep_ms(100);  
+  gpio_put(LED_PIN_BLUE, false);
+  sleep_ms(100);
 }
