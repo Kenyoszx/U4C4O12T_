@@ -19,7 +19,7 @@
 
 // Variáveis globais
 static volatile uint32_t last_time = 0; // Armazena o tempo do último evento (em microssegundos)
-int counter;
+static volatile int counter = 0;
 
 // Protótipos das Funções
 void init();
@@ -41,8 +41,7 @@ void NUMBER_6();
 void NUMBER_7();
 void NUMBER_8();
 void NUMBER_9();
-static void gpio_irq_handerA(uint gpio,uint32_t events);
-static void gpio_irq_handerB(uint gpio,uint32_t events);
+static void gpio_irq_handler(uint gpio,uint32_t events);
 
 // Definição de pixel GRB
 struct pixel_t
@@ -70,8 +69,7 @@ int main()
 void init(){
   // inicialização dos pinos
   npInit(MATRIZ_LEDS);
-  npClear();
-  npWrite();
+  NUMBER_0();
 
   gpio_init(LED_PIN_GREEN);
   gpio_set_dir(LED_PIN_GREEN, GPIO_OUT);
@@ -89,12 +87,12 @@ void init(){
   gpio_init(BUTTON_A_PIN);
   gpio_set_dir(BUTTON_A_PIN, GPIO_IN);
   gpio_pull_up(BUTTON_A_PIN);
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerA); //Rotina de Interrupção
+  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handler); //Rotina de Interrupção
   
   gpio_init(BUTTON_B_PIN);
   gpio_set_dir(BUTTON_B_PIN, GPIO_IN);
   gpio_pull_up(BUTTON_B_PIN);
-  gpio_set_irq_enabled_with_callback(BUTTON_B_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerB); //Rotina de Interrupção
+  gpio_set_irq_enabled_with_callback(BUTTON_B_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handler); //Rotina de Interrupção
   
 }
 void npInit(uint pin){
@@ -191,151 +189,151 @@ void show_number(){
 }
 void NUMBER_0(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(6,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(6,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_1(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(7,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(17,50,50,50);
-  npSetLED(22,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(7,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(17,50,50,0);
+  npSetLED(22,50,50,0);
   npWrite();
 }
 void NUMBER_2(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(6,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(6,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_3(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_4(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_5(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_6(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(6,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(6,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_7(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_8(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(6,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(6,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
 void NUMBER_9(){
   npClear();
-  npSetLED(1,50,50,50);
-  npSetLED(2,50,50,50);
-  npSetLED(3,50,50,50);
-  npSetLED(8,50,50,50);
-  npSetLED(11,50,50,50);
-  npSetLED(12,50,50,50);
-  npSetLED(13,50,50,50);
-  npSetLED(16,50,50,50);
-  npSetLED(18,50,50,50);
-  npSetLED(21,50,50,50);
-  npSetLED(22,50,50,50);
-  npSetLED(23,50,50,50);
+  npSetLED(1,50,50,0);
+  npSetLED(2,50,50,0);
+  npSetLED(3,50,50,0);
+  npSetLED(8,50,50,0);
+  npSetLED(11,50,50,0);
+  npSetLED(12,50,50,0);
+  npSetLED(13,50,50,0);
+  npSetLED(16,50,50,0);
+  npSetLED(18,50,50,0);
+  npSetLED(21,50,50,0);
+  npSetLED(22,50,50,0);
+  npSetLED(23,50,50,0);
   npWrite();
 }
-static void gpio_irq_handerA(uint gpio,uint32_t events){
-// Configura a ação ao apertar o botão A e implementa o Debouce  
+static void gpio_irq_handler(uint gpio,uint32_t events){
+// Configura a ação ao apertar o botão e implementa o Debouce  
 
   // Obtém o tempo atual em microssegundos
   uint32_t current_time = to_us_since_boot(get_absolute_time());
@@ -345,24 +343,12 @@ static void gpio_irq_handerA(uint gpio,uint32_t events){
   {
     last_time = current_time; // Atualiza o tempo do último evento
     //Código Função:
-    increase();
+    if (gpio == BUTTON_A_PIN)
+      increase();
+    else if (gpio == BUTTON_B_PIN)
+      decrement();
   }
   
-}
-static void gpio_irq_handerB(uint gpio,uint32_t events){
-// Configura a ação ao apertar o botão B e implementa o Debouce
-
-  // Obtém o tempo atual em microssegundos
-  uint32_t current_time = to_us_since_boot(get_absolute_time());
-
-  // Verifica se passou tempo suficiente desde o último evento
-  if (current_time - last_time > 50000) // 50 ms de debouncing
-  {
-    last_time = current_time; // Atualiza o tempo do último evento
-    //Código Função:
-    decrement();
-  }
-
 }
 void blink(){
   // Pisca o LED 5 vezes por segundo em cores alternadas
@@ -401,7 +387,7 @@ void increase(){
 void decrement(){
   // Decrementa o Contador e atualiza o número na Matriz
   counter --;
-  if (counter < 9)
+  if (counter < 0)
     counter = 9;
   show_number();
 }
