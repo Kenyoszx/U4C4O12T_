@@ -1,5 +1,6 @@
 //Inclusão das Bibliotecas
 #include <stdio.h>
+#include <stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
@@ -18,7 +19,7 @@
 
 // Variáveis globais
 static volatile uint32_t last_time = 0; // Armazena o tempo do último evento (em microssegundos)
-uint counter;
+int counter;
 
 // Protótipos das Funções
 void init();
@@ -26,6 +27,8 @@ void npInit(uint);
 void npSetLED(const uint, const uint8_t, const uint8_t, const uint8_t);
 void npClear();
 void npWrite();
+void show_number();
+void blink();
 void increase();
 void decrement();
 void NUMBER_0();
@@ -56,11 +59,12 @@ uint sm;
 
 int main()
 {
-    stdio_init_all();
-    while (true) {
-        printf("Hello, world!\n");
-        sleep_ms(1000);
-    }
+  stdio_init_all();
+  init();
+  while (true) {
+    //Led RGB pisca 5 vezes por segundo em cores alternadas
+    blink();
+  }
 }
 
 void init(){
@@ -145,6 +149,47 @@ void npWrite(){
   }
   sleep_us(100); // Espera 100us, sinal de RESET do datasheet.
 }
+void show_number(){
+  // Para cada número no contador mostra a animação do mesmo na matriz
+  switch (counter)
+  {
+  case 0:
+    NUMBER_0();
+    break;
+  case 1:
+    NUMBER_1();
+    break;
+  case 2:
+    NUMBER_2();
+    break;
+  case 3:
+    NUMBER_3();
+    break;
+  case 4:
+    NUMBER_4();
+    break;
+  case 5:
+    NUMBER_5();
+    break;
+  case 6:
+    NUMBER_6();
+    break;
+  case 7:
+    NUMBER_7();
+    break;
+  case 8:
+    NUMBER_8();
+    break;
+  case 9:
+    NUMBER_9();
+    break;
+  default:
+    // Se encontrar algum valor fora do intervalo de 1 à 9 encerra a execução
+    printf("[ERRO] Valor Inesperado no Contador"); 
+    exit (1);
+    break;
+  }
+}
 void NUMBER_0(){}
 void NUMBER_1(){}
 void NUMBER_2(){}
@@ -156,8 +201,7 @@ void NUMBER_7(){}
 void NUMBER_8(){}
 void NUMBER_9(){}
 static void gpio_irq_handerA(uint gpio,uint32_t events){
-  // Desativa a Rotina de interruçao durante a execução
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,false,&gpio_irq_handerA);
+// Configura a ação ao apertar o botão A e implementa o Debouce  
 
   // Obtém o tempo atual em microssegundos
   uint32_t current_time = to_us_since_boot(get_absolute_time());
@@ -170,13 +214,10 @@ static void gpio_irq_handerA(uint gpio,uint32_t events){
     increase();
   }
   
-  // Reativa a rotina de interrupção
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerA);
+
 }
 static void gpio_irq_handerB(uint gpio,uint32_t events){
-
-  // Desativa a Rotina de interruçao durante a execução
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,false,&gpio_irq_handerB);
+// Configura a ação ao apertar o botão B e implementa o Debouce
 
   // Obtém o tempo atual em microssegundos
   uint32_t current_time = to_us_since_boot(get_absolute_time());
@@ -189,9 +230,44 @@ static void gpio_irq_handerB(uint gpio,uint32_t events){
     decrement();
   }
 
-  // Reativa a rotina de interrupção
-  gpio_set_irq_enabled_with_callback(BUTTON_A_PIN,GPIO_IRQ_EDGE_FALL,true,&gpio_irq_handerB);
+
 
 }
-void increase(){}
-void decrement(){}
+void blink(){
+  gpio_put(LED_PIN_RED,true);
+  sleep_ms(100);
+  gpio_put(LED_PIN_RED,false);
+  sleep_ms(100);
+  gpio_put(LED_PIN_BLUE,true);
+  sleep_ms(100);
+  gpio_put(LED_PIN_BLUE,false);
+  sleep_ms(100);
+  gpio_put(LED_PIN_GREEN,true);
+  sleep_ms(100);
+  gpio_put(LED_PIN_GREEN,false);
+  sleep_ms(100);
+  gpio_put(LED_PIN_RED,true);
+  gpio_put(LED_PIN_BLUE,true);
+  gpio_put(LED_PIN_GREEN,true);
+  sleep_ms(100);
+  gpio_put(LED_PIN_RED,false);
+  gpio_put(LED_PIN_BLUE,false);
+  gpio_put(LED_PIN_GREEN,false);
+  sleep_ms(100);
+  gpio_put(LED_PIN_BLUE,true);
+  sleep_ms(100);
+  gpio_put(LED_PIN_BLUE,false);
+  sleep_ms(100);  
+}
+void increase(){
+  counter ++;
+  if (counter > 9)
+    counter = 0;
+  show_number();
+}
+void decrement(){
+  counter --;
+  if (counter < 9)
+    counter = 9;
+  show_number();
+}
