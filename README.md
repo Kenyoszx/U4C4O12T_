@@ -19,6 +19,9 @@ Este projeto utiliza uma matriz de LEDs e dois botões para exibir números de 0
 
 Antes de começar, certifique-se de que você tenha o ambiente de desenvolvimento do **Raspberry Pi Pico** configurado corretamente. Siga as instruções do [Raspberry Pi Pico SDK](https://www.raspberrypi.org/documentation/rp2040/getting-started/) para configurar o SDK e as ferramentas de compilação.
 
+## Video Demonstrativo do funcionamento
+[Demosntração: Contador Matriz de LEDs](https://drive.google.com/file/d/1CCH3RTBFresPvjJHcBJV0D2BcQPsQGNH/view?usp=drive_link)
+
 ## Compilação e Upload
 
 1. Compile o código usando o ambiente de desenvolvimento configurado.
